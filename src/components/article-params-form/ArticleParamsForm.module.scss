@@ -2,8 +2,8 @@
 	position: fixed;
 	left: 0;
 	width: 616px;
-	height: 100%;
-	overflow: scroll;
+	height: 78%;
+	overflow: hidden;
 	transform: translate(-616px);
 	transition: transform 0.5s ease;
 }
@@ -16,6 +16,7 @@
 	display: flex;
 	flex-shrink: 0;
 	flex-direction: column;
+	gap: 48px;
 	box-sizing: border-box;
 	width: 616px;
 	height: auto;
