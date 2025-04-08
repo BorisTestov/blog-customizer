@@ -8,21 +8,20 @@ import { defaultArticleState } from 'src/constants/articleProps';
 
 import 'src/styles/index.scss';
 import styles from 'src/styles/index.module.scss';
+import { ArticleState } from 'components/article-params-form/ArticleParamsForm';
 
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
 	const [articleState, setArticleState] = useState(defaultArticleState);
-	const [formState, setFormState] = useState(defaultArticleState);
 
-	const resetStyles = () => {
-		setFormState(defaultArticleState);
-		setArticleState(defaultArticleState);
+	const handleApplyStyles = (formState: ArticleState) => {
+		setArticleState(formState);
 	};
 
-	const applyStyles = () => {
-		setArticleState(formState);
+	const handleResetStyles = () => {
+		setArticleState(defaultArticleState);
 	};
 
 	return (
@@ -38,10 +37,8 @@ const App = () => {
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				state={formState}
-				setState={setFormState}
-				resetStyles={resetStyles}
-				applyStyles={applyStyles}
+				onApply={handleApplyStyles}
+				onReset={handleResetStyles}
 			/>
 			<Article />
 		</main>

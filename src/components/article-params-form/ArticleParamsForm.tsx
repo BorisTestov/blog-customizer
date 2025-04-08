@@ -10,6 +10,7 @@ import styles from './ArticleParamsForm.module.scss';
 import {
 	backgroundColors,
 	contentWidthArr,
+	defaultArticleState,
 	fontColors,
 	fontFamilyOptions,
 	fontSizeOptions,
@@ -28,43 +29,58 @@ export interface ArticleState {
 }
 
 interface ArticleParamsFormProps {
-	state: ArticleState;
-	setState: React.Dispatch<React.SetStateAction<ArticleState>>;
-	resetStyles: () => void;
-	applyStyles: () => void;
+	onApply: (formState: ArticleState) => void;
+	onReset: () => void;
 }
 
 export const ArticleParamsForm = ({
-	state,
-	setState,
-	resetStyles,
-	applyStyles,
+	onApply,
+	onReset,
 }: ArticleParamsFormProps) => {
 	const [isOpen, setOpen] = useState(false);
+	const [formState, setFormState] = useState(defaultArticleState);
 
 	const toggleOpen = () => {
 		setOpen((prevOpen) => !prevOpen);
 	};
 
-	const handleChangeBackgroundColor = (value: OptionType) => {
-		setState({ ...state, backgroundColor: value });
+	const handleChange = (field: keyof ArticleState) => {
+		return (value: OptionType) => {
+			setFormState((prevState: ArticleState) => ({
+				...prevState,
+				[field]: value,
+			}));
+		};
 	};
 
-	const handleChangeContentWidth = (value: OptionType) => {
-		setState({ ...state, contentWidth: value });
+	const handleReset = () => {
+		setFormState(defaultArticleState);
+		onReset();
 	};
 
-	const handleChangeFontFamily = (value: OptionType) => {
-		setState({ ...state, fontFamilyOption: value });
+	const handleApply = () => {
+		onApply(formState);
 	};
 
-	const handleChangeFontSize = (value: OptionType) => {
-		setState({ ...state, fontSizeOption: value });
-	};
-
-	const handleChangeFontColor = (value: OptionType) => {
-		setState({ ...state, fontColor: value });
-	};
+	// const handleChangeBackgroundColor = (value: OptionType) => {
+	// 	setState({ ...state, backgroundColor: value });
+	// };
+	//
+	// const handleChangeContentWidth = (value: OptionType) => {
+	// 	setState({ ...state, contentWidth: value });
+	// };
+	//
+	// const handleChangeFontFamily = (value: OptionType) => {
+	// 	setState({ ...state, fontFamilyOption: value });
+	// };
+	//
+	// const handleChangeFontSize = (value: OptionType) => {
+	// 	setState({ ...state, fontSizeOption: value });
+	// };
+	//
+	// const handleChangeFontColor = (value: OptionType) => {
+	// 	setState({ ...state, fontColor: value });
+	// };
 
 	const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -76,7 +92,7 @@ export const ArticleParamsForm = ({
 
 	return (
 		<>
-			<ArrowButton onClick={() => !isOpen && toggleOpen()} isOpen={isOpen} />
+			<ArrowButton onClick={toggleOpen} isOpen={isOpen} />
 			<aside
 				className={clsx(styles.container, {
 					[styles.container_open]: isOpen,
@@ -89,44 +105,43 @@ export const ArticleParamsForm = ({
 						Задайте параметры
 					</Text>
 					<Select
-						selected={state.fontFamilyOption}
+						title={'шрифт'}
+						onChange={handleChange('fontFamilyOption')}
+						selected={formState.fontFamilyOption}
 						options={fontFamilyOptions}
-						placeholder='Выберите шрифт'
-						title='шрифт'
-						onChange={handleChangeFontFamily}
 					/>
 					<RadioGroup
-						name='fontSize'
-						options={fontSizeOptions}
-						selected={state.fontSizeOption}
 						title='размер шрифта'
-						onChange={handleChangeFontSize}
+						name='fontSize'
+						onChange={handleChange('fontSizeOption')}
+						selected={formState.fontSizeOption}
+						options={fontSizeOptions}
 					/>
 					<Select
-						selected={state.fontColor}
-						options={fontColors}
-						placeholder='Выберите цвет'
 						title='цвет шрифта'
-						onChange={handleChangeFontColor}
+						placeholder='Выберите цвет'
+						onChange={handleChange('fontColor')}
+						selected={formState.fontColor}
+						options={fontColors}
 					/>
 					<Separator />
 					<Select
-						selected={state.backgroundColor}
-						options={backgroundColors}
-						placeholder='Выберите цвет'
 						title='цвет фона'
-						onChange={handleChangeBackgroundColor}
+						placeholder='Выберите цвет'
+						onChange={handleChange('backgroundColor')}
+						selected={formState.backgroundColor}
+						options={backgroundColors}
 					/>
 					<Select
-						selected={state.contentWidth}
-						options={contentWidthArr}
-						placeholder='Выберите ширину'
 						title='ширина контента'
-						onChange={handleChangeContentWidth}
+						placeholder='Выберите ширину'
+						onChange={handleChange('contentWidth')}
+						selected={formState.contentWidth}
+						options={contentWidthArr}
 					/>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='clear' onClick={resetStyles} />
-						<Button title='Применить' type='apply' onClick={applyStyles} />
+						<Button title='Сбросить' type='clear' onClick={handleReset} />
+						<Button title='Применить' type='apply' onClick={handleApply} />
 					</div>
 				</form>
 			</aside>
