@@ -3,7 +3,7 @@ import { Button } from 'src/ui/button';
 import { Text } from 'src/ui/text';
 import { Select } from 'src/ui/select';
 
-import React, { FormEvent, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
 
 import styles from './ArticleParamsForm.module.scss';
@@ -64,7 +64,8 @@ export const ArticleParamsForm = ({
 		onReset();
 	};
 
-	const handleApply = () => {
+	const handleApply = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 		onApply(formState);
 	};
 
@@ -78,7 +79,8 @@ export const ArticleParamsForm = ({
 				<form
 					className={styles.form}
 					ref={formRef}
-					onSubmit={(e: FormEvent) => e.preventDefault()}>
+					onSubmit={handleApply}
+					onReset={handleReset}>
 					<Text as={'h2'} size={31} weight={800} uppercase={true}>
 						Задайте параметры
 					</Text>
@@ -118,8 +120,8 @@ export const ArticleParamsForm = ({
 						options={contentWidthArr}
 					/>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='clear' onClick={handleReset} />
-						<Button title='Применить' type='apply' onClick={handleApply} />
+						<Button title='Сбросить' type='clear' htmlType={'reset'} />
+						<Button title='Применить' type='apply' htmlType={'submit'} />
 					</div>
 				</form>
 			</aside>
