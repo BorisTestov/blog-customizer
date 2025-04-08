@@ -37,12 +37,18 @@ export const ArticleParamsForm = ({
 	onApply,
 	onReset,
 }: ArticleParamsFormProps) => {
+	const formRef = useRef<HTMLFormElement | null>(null);
 	const [isOpen, setOpen] = useState(false);
 	const [formState, setFormState] = useState(defaultArticleState);
 
 	const toggleOpen = () => {
 		setOpen((prevOpen) => !prevOpen);
 	};
+	useCloseForm({
+		isOpen: isOpen,
+		onClose: toggleOpen,
+		rootRef: formRef,
+	});
 
 	const handleChange = (field: keyof ArticleState) => {
 		return (value: OptionType) => {
@@ -61,34 +67,6 @@ export const ArticleParamsForm = ({
 	const handleApply = () => {
 		onApply(formState);
 	};
-
-	// const handleChangeBackgroundColor = (value: OptionType) => {
-	// 	setState({ ...state, backgroundColor: value });
-	// };
-	//
-	// const handleChangeContentWidth = (value: OptionType) => {
-	// 	setState({ ...state, contentWidth: value });
-	// };
-	//
-	// const handleChangeFontFamily = (value: OptionType) => {
-	// 	setState({ ...state, fontFamilyOption: value });
-	// };
-	//
-	// const handleChangeFontSize = (value: OptionType) => {
-	// 	setState({ ...state, fontSizeOption: value });
-	// };
-	//
-	// const handleChangeFontColor = (value: OptionType) => {
-	// 	setState({ ...state, fontColor: value });
-	// };
-
-	const formRef = useRef<HTMLFormElement | null>(null);
-
-	useCloseForm({
-		isOpen: isOpen,
-		onClose: toggleOpen,
-		rootRef: formRef,
-	});
 
 	return (
 		<>
