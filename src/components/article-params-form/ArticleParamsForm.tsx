@@ -18,7 +18,7 @@ import {
 } from 'src/constants/articleProps';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
-import { useCloseForm } from 'components/article-params-form/useCloseForm';
+import { useCloseForm } from 'src/hooks/useCloseForm';
 
 export interface ArticleState {
 	fontFamilyOption: OptionType;
